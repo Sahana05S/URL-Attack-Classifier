@@ -1,0 +1,5 @@
+url,status_code
+/login?id=1' OR '1'='1,200
+/search?q=<script>alert(1)</script>,200
+/home,200
+/download?file=../../etc/passwd,403
