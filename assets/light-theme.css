@@ -1,0 +1,134 @@
+:root {
+  --bg: radial-gradient(120% 120% at 12% 18%, #f6f9ff 0%, #eef3ff 45%, #e4ecff 100%);
+  --panel: rgba(255, 255, 255, 0.9);
+  --card: rgba(255, 255, 255, 0.95);
+  --border: #d7e1f3;
+  --text: #1f2a3d;
+  --muted: #5f6b82;
+  --primary: #2f6fed;
+  --accent: #63a2ff;
+  --radius: 16px;
+  --shadow: 0 12px 38px rgba(31, 63, 125, 0.18);
+  --transition: 160ms ease;
+}
+
+html,
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Segoe UI", "Nunito Sans", "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Layout */
+.block-container {
+  padding: 28px 32px;
+}
+
+/* Cards */
+[data-testid="stMetric"],
+[data-testid="stMarkdownContainer"] > div,
+.css-1r6slb0,
+.css-1d391kg,
+.element-container {
+  background: var(--card) !important;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px 20px;
+  backdrop-filter: blur(4px);
+}
+
+[data-testid="stMetric"]:hover,
+.element-container:hover {
+  transform: translateY(-2px);
+  transition: transform var(--transition), box-shadow var(--transition);
+  box-shadow: 0 16px 48px rgba(31, 63, 125, 0.22);
+}
+
+/* Headers */
+h1,
+h2,
+h3 {
+  letter-spacing: 0.2px;
+  color: var(--text);
+}
+h1 {
+  font-size: 2.3rem;
+}
+h2 {
+  font-size: 1.7rem;
+}
+h3 {
+  font-size: 1.4rem;
+}
+
+/* Buttons */
+button[kind="primary"],
+button[kind="secondary"] {
+  border-radius: 12px !important;
+  padding: 10px 18px !important;
+  font-size: 1rem !important;
+  font-weight: 700;
+  border: 1px solid transparent !important;
+  transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
+}
+
+button[kind="primary"] {
+  background: linear-gradient(135deg, var(--primary), var(--accent)) !important;
+  color: #f8fbff !important;
+  box-shadow: var(--shadow);
+}
+
+button[kind="secondary"] {
+  background: #eef3ff !important;
+  color: var(--text) !important;
+  border: 1px solid var(--border) !important;
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+/* Inputs */
+input,
+textarea,
+select {
+  background: #f7f9ff !important;
+  color: var(--text) !important;
+  border-radius: 12px !important;
+  border: 1px solid var(--border) !important;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 2px rgba(47, 111, 237, 0.15);
+}
+
+/* Tables */
+.dataframe {
+  background: rgba(255, 255, 255, 0.92) !important;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.dataframe th,
+.dataframe td {
+  border-color: var(--border) !important;
+  padding: 12px 14px;
+}
+
+.dataframe thead {
+  background: #f0f4ff;
+  color: var(--text);
+}
+
+/* Links */
+a {
+  color: var(--primary);
+}
+a:hover {
+  color: var(--accent);
+}
