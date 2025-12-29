@@ -1,4 +1,6 @@
-/* Global */
+/* =======================
+   THEME VARIABLES
+======================= */
 :root {
   --bg: #0b0f19;
   --panel: #111827;
@@ -23,146 +25,276 @@ html, body {
   font-family: var(--font);
 }
 
-/* Sidebar */
+/* Remove default Streamlit padding/margins for full-width control */
+div[data-testid="block-container"] {
+  padding: 16px 32px !important;
+  margin: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* Global background overlay (lightweight) */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.04), transparent 35%),
+              radial-gradient(circle at 80% 10%, rgba(255, 255, 255, 0.03), transparent 30%),
+              radial-gradient(circle at 50% 80%, rgba(255, 255, 255, 0.025), transparent 40%);
+  mix-blend-mode: screen;
+  z-index: 0;
+}
+
+/* =======================
+   SIDEBAR (SAFE)
+======================= */
 section[data-testid="stSidebar"] {
   background: linear-gradient(180deg, #0f172a 0%, #0b1020 100%);
   border-right: 1px solid var(--border);
 }
+
 section[data-testid="stSidebar"] [data-testid="stVerticalBlock"] {
   padding: 12px 16px;
 }
 
-/* Main container */
-.block-container {
+/* =======================
+   MAIN WRAPPER (KEY FIX)
+======================= */
+.app-wrapper {
+  min-height: 100vh;
   padding: 24px 32px;
+  background: radial-gradient(
+    circle at top,
+    #0b0f19 0%,
+    #0f172a 45%,
+    #0b0f19 100%
+  );
 }
 
-/* Headers */
-h1, h2, h3 {
+/* Remove background from Streamlit internals */
+div[data-testid="stHorizontalBlock"],
+div[data-testid="stVerticalBlock"],
+.element-container {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* =======================
+   HEADERS
+======================= */
+.app-wrapper h1,
+.app-wrapper h2,
+.app-wrapper h3 {
   color: var(--text);
   letter-spacing: 0.3px;
 }
-h1 { font-size: 2.2rem; }
-h2 { font-size: 1.6rem; }
-h3 { font-size: 1.35rem; }
 
-/* Cards */
-[data-testid="stMetric"],
-[data-testid="stMarkdownContainer"] > div,
-.css-1r6slb0, /* legacy container */
-.css-1d391kg /* legacy card */ {
-  background: var(--card) !important;
+.app-wrapper h1 { font-size: 2.2rem; }
+.app-wrapper h2 { font-size: 1.6rem; }
+.app-wrapper h3 { font-size: 1.35rem; }
+
+/* =======================
+   CARDS (EXPLICIT ONLY)
+======================= */
+.app-card {
+  background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 18px 20px;
 }
 
-/* Tables */
+/* Explicit content cards only */
+[data-testid="stMetric"],
+div[data-testid="stPlotlyChart"],
+div[data-testid="stDataFrame"] {
+  background: var(--card) !important;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px 16px;
+}
+
+[data-testid="stMetric"]:hover,
+div[data-testid="stPlotlyChart"]:hover,
+div[data-testid="stDataFrame"]:hover {
+  transform: translateY(-2px);
+  transition: transform var(--transition), box-shadow var(--transition);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* =======================
+   TABLES
+======================= */
 .dataframe {
   background: var(--panel) !important;
   border-radius: var(--radius);
   border: 1px solid var(--border);
   color: var(--text);
 }
+
 .dataframe th, .dataframe td {
   border-color: var(--border) !important;
   padding: 12px 14px;
 }
+
 .dataframe thead {
-  background: #111a2f;
+  background: var(--card);
   color: var(--text);
 }
 
-/* Buttons */
-button[kind="secondary"], button[kind="primary"] {
-  border-radius: 12px !important;
-  border: 1px solid transparent !important;
+/* =======================
+   BUTTONS (BASE STRUCTURE)
+======================= */
+.stButton button,
+button[kind] {
+  border-radius: 14px !important;
   font-size: 1rem !important;
   padding: 10px 18px !important;
-  font-weight: 600;
-  transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
+  font-weight: 700 !important;
+  margin: 4px 6px !important;
+  border: 1px solid transparent !important;
+  transition: transform var(--transition), box-shadow var(--transition), background var(--transition), border-color var(--transition);
 }
-button[kind="primary"] {
-  background: linear-gradient(135deg, var(--primary), var(--primary-strong)) !important;
-  color: #0a1222 !important;
-  box-shadow: var(--shadow);
-}
-button[kind="primary"]:hover {
-  transform: translateY(-1px);
-}
-button[kind="secondary"] {
-  background: #1c2538 !important;
-  color: var(--text) !important;
-  border-color: var(--border) !important;
-}
-button:focus { outline: 2px solid var(--primary); }
 
-/* Inputs */
+.stButton button:hover,
+button[kind]:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 0 6px rgba(0, 0, 0, 0.08), var(--shadow);
+}
+
+.stButton button:disabled,
+button[kind]:disabled {
+  opacity: 0.55 !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+/* =======================
+   INPUTS
+======================= */
 input, textarea, select {
   border-radius: 12px !important;
   border: 1px solid var(--border) !important;
   background: #10182b !important;
   color: var(--text) !important;
-  font-size: 1rem !important;
 }
+
 input:focus, textarea:focus, select:focus {
   border-color: var(--primary);
   box-shadow: 0 0 0 2px rgba(79, 156, 255, 0.25);
 }
 
-/* Badges / Pills */
+/* =======================
+   BADGES
+======================= */
 .badge {
   display: inline-flex;
-  align-items: center;
   padding: 6px 12px;
   border-radius: 999px;
   font-weight: 700;
   font-size: 0.95rem;
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
-}
-.badge.high { background: rgba(224, 85, 85, 0.2); color: var(--high); border: 1px solid rgba(224, 85, 85, 0.35); }
-.badge.medium { background: rgba(231, 165, 77, 0.2); color: var(--medium); border: 1px solid rgba(231, 165, 77, 0.35); }
-.badge.low { background: rgba(83, 194, 127, 0.2); color: var(--low); border: 1px solid rgba(83, 194, 127, 0.35); }
-
-/* Status tags */
-.status-high { color: var(--high); }
-.status-medium { color: var(--medium); }
-.status-low { color: var(--low); }
-
-/* Charts container */
-.element-container {
-  background: var(--card);
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow);
-  padding: 12px;
 }
 
-/* Expander */
-details {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 12px 14px;
-}
-details[open] summary {
-  color: var(--primary);
-}
+.badge.high { background: rgba(224,85,85,0.2); color: var(--high); }
+.badge.medium { background: rgba(231,165,77,0.2); color: var(--medium); }
+.badge.low { background: rgba(83,194,127,0.2); color: var(--low); }
 
-/* Metrics */
-[data-testid="stMetric"] label {
-  color: var(--muted);
-  font-size: 0.95rem;
-}
-[data-testid="stMetricValue"] {
-  font-size: 1.6rem;
-  font-weight: 700;
-}
-
-/* Markdown links */
+/* =======================
+   LINKS
+======================= */
 a {
   color: var(--primary);
 }
-a:hover { color: var(--primary-strong); }
+a:hover {
+  color: var(--primary-strong);
+}
+/* =========================================
+   KILL STREAMLIT GHOST LAYOUT BARS
+========================================= */
+
+/* Remove empty vertical blocks */
+div[data-testid="stVerticalBlock"]:empty {
+  display: none !important;
+}
+
+/* Remove empty horizontal blocks */
+div[data-testid="stHorizontalBlock"]:empty {
+  display: none !important;
+}
+
+/* Remove empty blocks with only whitespace */
+div[data-testid="stVerticalBlock"]:not(:has(*)) {
+  display: none !important;
+}
+div[data-testid="stHorizontalBlock"]:not(:has(*)) {
+  display: none !important;
+}
+
+/* Remove invisible markdown spacers */
+div[data-testid="stMarkdown"]:empty {
+  display: none !important;
+}
+
+/* Extra guard: hide ghost rows/cols with empty children */
+div[data-testid="stMain"] div[data-testid="stHorizontalBlock"]:has(> div:empty),
+div[data-testid="stMain"] div[data-testid="stVerticalBlock"]:has(> div:empty) {
+  display: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Normalize padding to avoid thick empty bars */
+div[data-testid="stHorizontalBlock"],
+div[data-testid="stVerticalBlock"] {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* Hide empty columns */
+div[data-testid="column"] > div:empty {
+  display: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Hide layout blocks that carry no visible elements */
+div[data-testid="stHorizontalBlock"]:not(:has(button, a, input, select, textarea, label, img, svg, canvas, table, h1, h2, h3, h4, h5, h6, p, div[data-testid="stMetricValue"], section, iframe, [role])) {
+  display: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+div[data-testid="stVerticalBlock"]:not(:has(button, a, input, select, textarea, label, img, svg, canvas, table, h1, h2, h3, h4, h5, h6, p, div[data-testid="stMetricValue"], section, iframe, [role])) {
+  display: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* =======================
+   ANIMATIONS
+======================= */
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.block-container > div,
+[data-testid="stMetric"],
+div[data-testid="stPlotlyChart"],
+div[data-testid="stDataFrame"] {
+  animation: fadeSlideUp 320ms ease both;
+}
+
+@keyframes chartPop {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.js-plotly-plot {
+  animation: chartPop 360ms ease both;
+}

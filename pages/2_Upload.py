@@ -1,5 +1,4 @@
 import streamlit as st, pandas as pd
-import time
 from pathlib import Path
 
 BASE_CSS = Path("assets/style.css")
@@ -20,50 +19,50 @@ def apply_theme_from_session():
         with css_path.open() as f:
             st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-    if theme == "Light":
-        background_css = """
-        body {
-            background: radial-gradient(120% 120% at 14% 18%, #f6f9ff 0%, #eef3ff 40%, #e4ecff 100%);
-        }
-        .block-container {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(244, 248, 255, 0.9));
-            border-radius: 20px;
-            padding: 32px;
-            box-shadow: 0 18px 56px rgba(31, 63, 125, 0.18);
-        }
-        """
-    else:
-        background_css = """
-        body {
-            background: radial-gradient(120% 120% at 15% 20%, #0b1224 0%, #0c1328 35%, #080f1f 55%, #060b17 100%);
-        }
-        .block-container {
-            background: linear-gradient(135deg, rgba(19, 28, 48, 0.55), rgba(8, 15, 31, 0.65));
-            border-radius: 20px;
-            padding: 32px;
-            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.35);
-        }
-        """
-    st.markdown(f"<style>{background_css}</style>", unsafe_allow_html=True)
-
 
 if "theme" not in st.session_state:
     st.session_state["theme"] = "Dark"
 
 apply_theme_from_session()
 
-# Smooth transition
-with st.spinner("Loading upload..."):
-    time.sleep(0.5)
+# Top header (single columns layout)
+header_cols = st.columns([2, 1, 1, 1, 1])
+header_cols[0].markdown("**URL Attack Detection System**")
+header_cols[1].page_link("pages/1_Home.py", label="Home")
+header_cols[2].page_link("pages/2_Upload.py", label="Upload")
+header_cols[3].page_link("pages/3_Dashboard.py", label="Dashboard")
+with header_cols[4]:
+    current_theme = st.session_state["theme"]
+    toggle_val = st.toggle("Dark theme", value=current_theme == "Dark", key="theme_toggle_upload")
+    new_theme = "Dark" if toggle_val else "Light"
+    if new_theme != current_theme:
+        st.session_state["theme"] = new_theme
+        apply_theme_from_session()
 
 st.title("Upload Logs")
-st.markdown(
-    "Upload URL access logs in CSV format. Expected columns include URL, source IP, user agent, timestamp, and any existing verdicts/labels for analysis."
-)
+st.session_state.setdefault("upload_redirect", False)
 
-file = st.file_uploader("Upload CSV", type="csv")
+with st.container():
+    st.markdown(
+        """
+        <div style="max-width: 900px; margin: 0 auto; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; box-shadow: var(--shadow);">
+            <div style="font-weight: 800; font-size: 1.15rem; margin-bottom: 6px;">Upload URL Access Logs</div>
+            <p style="margin: 0 0 10px 0; color: var(--muted); line-height: 1.6;">
+                Upload a CSV containing columns like <strong>url</strong>, <strong>status_code</strong>, <strong>source_ip</strong>, <strong>user_agent</strong>, and optional labels/verdicts.
+                Data stays local; once processed, you'll be redirected to the dashboard.
+            </p>
+        """,
+        unsafe_allow_html=True,
+    )
+    file = st.file_uploader("CSV file", type="csv")
+    st.markdown("</div>", unsafe_allow_html=True)
+
 if file:
     df = pd.read_csv(file)
     st.session_state["data"] = df
-    st.success("Logs uploaded successfully.")
+    st.session_state["upload_redirect"] = True
+    st.success("Logs uploaded successfully. Redirecting to dashboard...")
+    st.balloons()
+
+if st.session_state.get("upload_redirect"):
     st.switch_page("pages/3_Dashboard.py")
