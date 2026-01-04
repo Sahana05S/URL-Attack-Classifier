@@ -1,5 +1,7 @@
-import streamlit as st, pandas as pd
+import streamlit as st
 from pathlib import Path
+import pandas as pd
+from core.pipeline import analyze_urls
 
 BASE_CSS = Path("assets/style.css")
 THEME_FILES = {
@@ -41,6 +43,8 @@ with header_cols[4]:
 
 st.title("Upload Logs")
 st.session_state.setdefault("upload_redirect", False)
+st.session_state.setdefault("analysis_rows", None)
+st.session_state.setdefault("uploaded_urls", None)
 
 with st.container():
     st.markdown(
@@ -58,11 +62,20 @@ with st.container():
     st.markdown("</div>", unsafe_allow_html=True)
 
 if file:
-    df = pd.read_csv(file)
-    st.session_state["data"] = df
-    st.session_state["upload_redirect"] = True
-    st.success("Logs uploaded successfully. Redirecting to dashboard...")
-    st.balloons()
+    try:
+        df = pd.read_csv(file)
+        if "url" not in df.columns:
+            st.error("Uploaded CSV must contain a 'url' column.")
+        else:
+            urls = df["url"].dropna().astype(str).tolist()
+            analysis_rows = analyze_urls(urls)
+            st.session_state["uploaded_urls"] = urls
+            st.session_state["analysis_rows"] = analysis_rows
+            st.session_state["upload_redirect"] = True
+            st.success("Logs uploaded successfully. Redirecting to dashboard...")
+            st.balloons()
+    except Exception as exc:
+        st.error(f"Failed to process file: {exc}")
 
 if st.session_state.get("upload_redirect"):
     st.switch_page("pages/3_Dashboard.py")

@@ -1,0 +1,14 @@
+timestamp,ip,url,label
+2025-01-01 10:00:01,192.168.1.10,https://www.google.com,benign
+2025-01-01 10:00:05,192.168.1.11,https://github.com/login,benign
+2025-01-01 10:00:08,192.168.1.12,https://example.com/products?id=25,benign
+2025-01-01 10:01:00,45.133.22.9,http://test.com/index.php?id=1 OR 1=1,malicious
+2025-01-01 10:01:02,45.133.22.9,http://test.com/login.php?user=admin'--,malicious
+2025-01-01 10:01:04,45.133.22.9,http://test.com/index.php?id=1 AND sleep(5),malicious
+2025-01-01 10:02:10,172.16.4.22,http://example.com/search?q=<script>alert(1)</script>,malicious
+2025-01-01 10:02:12,172.16.4.22,http://example.com/search?q=%3Cscript%3Ealert(1)%3C/script%3E,malicious
+2025-01-01 10:03:00,10.0.0.5,http://example.com/download?file=../../etc/passwd,malicious
+2025-01-01 10:04:00,185.22.11.9,http://example.com/run?cmd=whoami,malicious
+2025-01-01 10:04:03,185.22.11.9,http://example.com/run?cmd=ls -la,malicious
+2025-01-01 10:05:00,192.168.1.15,https://example.com/search?q=how+to+learn+sql,benign
+2025-01-01 10:05:05,192.168.1.16,https://example.com/blog/xss-prevention-guide,benign

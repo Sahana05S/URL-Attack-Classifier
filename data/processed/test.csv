@@ -1,0 +1,6 @@
+url,label,source
+http://secure-paypal.com@evil-site.ru/,malicious,malicious_urls.csv
+https://www.stackoverflow.com/,benign,benign_urls.csv
+https://scikit-learn.org/,benign,benign_urls.csv
+http://free-giftcards.ga/claim,malicious,malicious_urls.csv
+https://www.github.com/,benign,benign_urls.csv

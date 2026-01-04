@@ -1,0 +1,5 @@
+url,label,source
+http://paypal-account-check.xyz/login,malicious,malicious_urls.csv
+https://docs.python.org/,benign,benign_urls.csv
+https://www.apple.com/,benign,benign_urls.csv
+http://test.com/index.php?id=1%27%20OR%201=1--,malicious,malicious_urls.csv
