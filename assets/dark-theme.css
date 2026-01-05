@@ -1,12 +1,12 @@
 :root {
-  --bg: radial-gradient(120% 120% at 20% 15%, #090040 0%, #1b0d60 45%, #090040 100%);
-  --panel: rgba(23, 11, 76, 0.9);
-  --card: rgba(27, 15, 70, 0.9);
-  --border: #2d1b66;
-  --text: #f3edff;
-  --muted: #c4b8f5;
-  --primary: #b13bff;
-  --accent: #ffcc00;
+  --bg: radial-gradient(120% 120% at 20% 15%, #061E29 0%, #0b2c3c 45%, #061E29 100%);
+  --panel: rgba(6, 30, 41, 0.82);
+  --card: rgba(12, 36, 48, 0.9);
+  --border: #1D546D;
+  --text: #F3F4F4;
+  --muted: #9fb4c4;
+  --primary: #061E29;
+  --accent: #5F9598;
   --radius: 16px;
   --shadow: 0 18px 48px rgba(0, 0, 0, 0.55);
   --transition: 160ms ease;
@@ -14,24 +14,20 @@
 
 html,
 body {
-  background: var(--bg);
+  background: transparent;
   color: var(--text);
   font-family: "Segoe UI", "Nunito Sans", "Helvetica Neue", Arial, sans-serif;
-}
-
-.block-container {
-  padding: 24px 28px;
 }
 
 [data-testid="stMetric"],
 [data-testid="stMarkdownContainer"] > div,
 .element-container {
-  background: var(--card) !important;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 18px 20px;
-  backdrop-filter: blur(3px);
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0;
+  box-shadow: none !important;
+  padding: 0;
+  backdrop-filter: none;
 }
 
 h1,
@@ -45,24 +41,24 @@ h2 { font-size: 1.7rem; }
 h3 { font-size: 1.4rem; }
 
 button[kind="primary"] {
-  background: linear-gradient(135deg, #b13bff, #ffcc00) !important;
-  color: #14073d !important;
-  border-color: #d99cff !important;
+  background: var(--primary) !important;
+  color: var(--text) !important;
+  border-color: var(--accent) !important;
   box-shadow: var(--shadow);
 }
 
 button[kind="primary"]:hover:not(:disabled) {
-  box-shadow: 0 0 12px rgba(255, 204, 0, 0.35), var(--shadow);
+  box-shadow: 0 0 12px rgba(95, 149, 152, 0.35), var(--shadow);
 }
 
 button[kind="secondary"] {
-  background: rgba(36, 20, 90, 0.9) !important;
+  background: rgba(29, 84, 109, 0.55) !important;
   color: var(--text) !important;
-  border: 1px solid #5531a3 !important;
+  border: 1px solid var(--accent) !important;
 }
 
 button[kind="secondary"]:hover:not(:disabled) {
-  box-shadow: 0 0 12px rgba(177, 59, 255, 0.2), var(--shadow);
+  box-shadow: 0 0 12px rgba(95, 149, 152, 0.35), var(--shadow);
 }
 
 input,

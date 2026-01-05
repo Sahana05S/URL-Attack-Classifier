@@ -1,16 +1,27 @@
 import streamlit as st
-from pathlib import Path
-import pandas as pd
-
+from core.ui_shell import apply_global_styles, top_navbar
 from core.pipeline import analyze_urls
 
-st.set_page_config(page_title="Successful Attacks", layout="wide")
+st.set_page_config(page_title="Successful Attacks", layout="wide", initial_sidebar_state="collapsed")
 
-BASE_CSS = Path("assets/style.css")
-if BASE_CSS.exists():
-    st.markdown(f"<style>{BASE_CSS.read_text()}</style>", unsafe_allow_html=True)
+apply_global_styles()
+top_navbar("Dashboard")
 
-st.markdown("## 🚨 Successful Attacks")
+# Auth guard
+if not st.session_state.get("auth_ok"):
+    st.session_state["post_login_target"] = "pages/4_Successful_Attacks.py"
+    st.session_state.show_auth = True
+    st.switch_page("app.py")
+
+st.markdown(
+    """
+    <div class="glass-card stack">
+      <div class="card-title">Successful Attacks</div>
+      <div class="muted">High-risk URLs that cleared detection thresholds.</div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
 # Prefer existing analysis rows; otherwise re-run on uploaded URLs; otherwise fallback to mock
 analysis_rows = st.session_state.get("analysis_rows")
@@ -25,21 +36,27 @@ if not results and uploaded_urls:
         st.stop()
 
 if not results:
-    # Light mock to avoid empty page when nothing uploaded
     mock_urls = [
         "http://example.local/login.php?id=1' OR 1=1",
         "http://evil.tk/admin/panel?cmd=cat%20/etc/passwd",
     ]
     results = analyze_urls(mock_urls)
 
-# Filter for high risk only
 high_risk = [r for r in results if str(r.get("risk_level", "")).lower() == "high"]
 
 if not high_risk:
-    st.info("No successful attacks detected.")
+    st.markdown(
+        """
+        <div class="glass-card stack">
+          <div class="card-title">No successful attacks detected</div>
+          <div class="muted">Upload fresh data or adjust detection settings to see results here.</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
     st.stop()
 
-for idx, row in enumerate(high_risk, start=1):
+for row in high_risk:
     url = row.get("url", "")
     risk_score = int(row.get("risk_score", 0))
     ml_prob = float(row.get("ml_probability", 0.0))
@@ -48,11 +65,15 @@ for idx, row in enumerate(high_risk, start=1):
     rules_display = ", ".join(rules) if rules else "None"
 
     st.markdown(
-        f"**{url}**\n\n"
-        f"- Risk Score: {risk_score}\n"
-        f"- ML confidence: {ml_conf_pct}%\n"
-        f"- Rules: {rules_display}\n"
+        f"""
+        <div class="glass-card stack">
+          <div class="card-title">🚨 {url}</div>
+          <div class="muted">Risk Score: {risk_score}</div>
+          <div class="muted">ML confidence: {ml_conf_pct}%</div>
+          <div class="muted">Rules: {rules_display}</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
     with st.expander("Why was this flagged?"):
-        st.write(row.get("why_summary", "No explanation available"))
-    st.markdown("---")
+        st.markdown(f"""<div class="glass-card">{row.get("why_summary", "No explanation available")}</div>""", unsafe_allow_html=True)
